@@ -17,7 +17,7 @@ go get github.com/tiendung1510/rsautil
 
 ## Demo
 
-[Demo](/demo)
+[Demo](/demo/demo.go)
 
 ## License
 
