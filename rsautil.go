@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/pem"
 	"fmt"
 )
@@ -52,6 +53,9 @@ func PublicKeyToBytes(pub *rsa.PublicKey) ([]byte, error) {
 // BytesToPublicKey convert from bytes to public key
 func BytesToPublicKey(pub []byte) (*rsa.PublicKey, error) {
 	block, _ := pem.Decode(pub)
+	if block == nil {
+		return nil, fmt.Errorf("There is no PEM data in this key")
+	}
 	enc := x509.IsEncryptedPEMBlock(block)
 	b := block.Bytes
 	var err error
@@ -76,6 +80,9 @@ func BytesToPublicKey(pub []byte) (*rsa.PublicKey, error) {
 // BytesToPrivateKey convert from bytes to private key
 func BytesToPrivateKey(priv []byte) (*rsa.PrivateKey, error) {
 	block, _ := pem.Decode(priv)
+	if block == nil {
+		return nil, fmt.Errorf("There is no PEM data in this key")
+	}
 	enc := x509.IsEncryptedPEMBlock(block)
 	b := block.Bytes
 	var err error
@@ -94,4 +101,19 @@ func BytesToPrivateKey(priv []byte) (*rsa.PrivateKey, error) {
 		return nil, fmt.Errorf("This key is not a rsa private key")
 	}
 	return key, nil
+}
+
+// Encrypt given text with given *rsa.PublicKey
+func Encrypt(pub *rsa.PublicKey, text string) (string, error) {
+	cipherText, err := rsa.EncryptPKCS1v15(rand.Reader, pub, []byte(text))
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(cipherText), nil
+}
+
+// Decrypt given ciptherText with given *rsa.PrivateKey
+func Decrypt(priv *rsa.PrivateKey, cipherText string) (string, error) {
+	text, err := rsa.DecryptPKCS1v15(rand.Reader, priv, []byte(cipherText))
+	return string(text), err
 }
