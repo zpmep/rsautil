@@ -42,7 +42,7 @@ func main() {
 	pri2, err := rsautil.BytesToPrivateKey(priBytes)
 	check(err)
 
-	// Descrypt ciphertext with private key
+	// Decrypt ciphertext with private key
 	message, err := rsautil.Decrypt(pri2, ciphertext)
 	check(err)
 

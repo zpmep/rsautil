@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/pem"
 	"fmt"
+	"io/ioutil"
 )
 
 /*
@@ -103,12 +104,31 @@ func BytesToPrivateKey(priv []byte) (*rsa.PrivateKey, error) {
 	return key, nil
 }
 
+// PublicKeyFromFile read file and convert to public key
+func PublicKeyFromFile(filename string) (*rsa.PublicKey, error) {
+	pub, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return BytesToPublicKey(pub)
+}
+
+// PrivateKeyFromFile read file and convert to private key
+func PrivateKeyFromFile(filename string) (*rsa.PrivateKey, error) {
+	priv, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return BytesToPrivateKey(priv)
+}
+
 // Encrypt given text with given *rsa.PublicKey
 func Encrypt(pub *rsa.PublicKey, text string) (string, error) {
 	cipherText, err := rsa.EncryptPKCS1v15(rand.Reader, pub, []byte(text))
 	return string(cipherText), err
 }
 
+// EncryptToBase64 encrypt rsa and encode to base64
 func EncryptToBase64(pub *rsa.PublicKey, text string) (string, error) {
 	cipherText, err := Encrypt(pub, text)
 	if err != nil {
