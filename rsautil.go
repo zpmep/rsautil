@@ -106,10 +106,15 @@ func BytesToPrivateKey(priv []byte) (*rsa.PrivateKey, error) {
 // Encrypt given text with given *rsa.PublicKey
 func Encrypt(pub *rsa.PublicKey, text string) (string, error) {
 	cipherText, err := rsa.EncryptPKCS1v15(rand.Reader, pub, []byte(text))
+	return string(cipherText), err
+}
+
+func EncryptToBase64(pub *rsa.PublicKey, text string) (string, error) {
+	cipherText, err := Encrypt(pub, text)
 	if err != nil {
 		return "", err
 	}
-	return base64.StdEncoding.EncodeToString(cipherText), nil
+	return base64.StdEncoding.EncodeToString([]byte(cipherText)), nil
 }
 
 // Decrypt given ciptherText with given *rsa.PrivateKey

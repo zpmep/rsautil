@@ -1,8 +1,6 @@
 package main
 
 import (
-	"crypto/rand"
-	"crypto/rsa"
 	"log"
 
 	"github.com/tiendung1510/rsautil"
@@ -35,7 +33,7 @@ func main() {
 	check(err)
 
 	// Encrypt message with publickey
-	ciphertext, err := rsa.EncryptPKCS1v15(rand.Reader, pub2, []byte("github.com/tiendung1510/rsautil"))
+	ciphertext, err := rsautil.Encrypt(pub2, "github.com/tiendung1510/rsautil")
 	check(err)
 
 	log.Println(string(ciphertext))
@@ -45,7 +43,7 @@ func main() {
 	check(err)
 
 	// Descrypt ciphertext with private key
-	message, err := rsa.DecryptPKCS1v15(rand.Reader, pri2, ciphertext)
+	message, err := rsautil.Decrypt(pri2, ciphertext)
 	check(err)
 
 	log.Println(string(message))
