@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/tiendung1510/rsautil"
+	"github.com/zpmep/rsautil"
 )
 
 func check(err error) {
@@ -33,7 +33,7 @@ func main() {
 	check(err)
 
 	// Encrypt message with publickey
-	ciphertext, err := rsautil.Encrypt(pub2, "github.com/tiendung1510/rsautil")
+	ciphertext, err := rsautil.Encrypt(pub2, "github.com/zpmep/rsautil")
 	check(err)
 
 	log.Println(string(ciphertext))

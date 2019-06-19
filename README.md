@@ -5,7 +5,7 @@ Small RSA utilities for Golang
 ## Download
 
 ```bash
-go get github.com/tiendung1510/rsautil
+go get github.com/zpmep/rsautil
 ```
 
 ## Features
